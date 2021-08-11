@@ -8,12 +8,14 @@
         <div class="ifmobileblock">{{total_invoice}} invoices</div>
       </div>
       <div class="right">
-        <div class="select" @click="showFilter = !showFilter"><span class="ifdesktop">Filter by status</span><span class="ifmobile">Filter</span> <i
-            class="fas fa-chevron-down arrow"></i>
+        <div class="select" @click="showFilter = !showFilter"><span class="ifdesktop">Filter by status</span><span
+            class="ifmobile">Filter</span> <i class="fas fa-chevron-down arrow"></i>
           <div class="dropdown-menu" v-if="showFilter">
-              <div @click="filter_status='Pending'">Pending</div>
-              <div @click="filter_status='Paid'">Paid</div>
-              <div @click="filter_status='Draft'">Draft</div>
+            <div @click="filter_status=''" class="listmenu">All</div>
+            <div @click="filter_status='Pending'" class="listmenu">Pending</div>
+            <div @click="filter_status='Paid'" class="listmenu">Paid</div>
+            <div @click="filter_status='Draft'" class="listmenu">Draft</div>
+
           </div>
         </div>
         <div class="button-add" @click="showModal = true">
@@ -38,7 +40,7 @@
         </div>
       </nuxt-link>
     </div>
-     <modal :isopen="showModal" @changeModal="handleModal" :invoice_id="null" @successUpdate="readFromRealtimeDb()"/>
+    <modal :isopen="showModal" @changeModal="handleModal" :invoice_id="null" @successUpdate="readFromRealtimeDb()" />
   </div>
 </template>
 
@@ -47,11 +49,13 @@
     mapGetters
   } from 'vuex'
   import date from '~/mixins/date'
-import modal from '~/components/modal.vue'
+  import modal from '~/components/modal.vue'
 
   export default {
     mixins: [date],
-    components: {modal},
+    components: {
+      modal
+    },
     data() {
       return {
         invoices: [],
@@ -75,10 +79,10 @@ import modal from '~/components/modal.vue'
       this.readFromRealtimeDb()
     },
     methods: {
-        handleModal(val){
-            console.log(val, 'dff')
-            this.showModal = val
-        },
+      handleModal(val) {
+        console.log(val, 'dff')
+        this.showModal = val
+      },
       async readFromRealtimeDb(status = "") {
         const dbref = this.$fire.database.ref('invoices')
         try {
@@ -158,8 +162,23 @@ import modal from '~/components/modal.vue'
           width: 50%;
           position: relative;
           cursor: pointer;
-          .dropdown-menu{
-              position: absolute;
+
+          .dropdown-menu {
+            position: absolute;
+            right: 0;
+            left: 0;
+            background-color: #1f2137;
+            border-radius: 5px;
+            margin-top: 1rem;
+
+            .listmenu {
+              padding: 10px 5px;
+
+              &:hover {
+                background-color: #7c3cd21f;
+              }
+            }
+
             //   display: none;
           }
 
@@ -239,7 +258,8 @@ import modal from '~/components/modal.vue'
               background-color: #216321;
             }
           }
-           &.Draft {
+
+          &.Draft {
             background-color: #5d616b1f;
             color: #5d616b;
 
